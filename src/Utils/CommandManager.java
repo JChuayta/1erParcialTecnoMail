@@ -97,13 +97,39 @@ public class CommandManager {
         }
         try {
             args = command.substring(index + 1, index2);
-           command= command.substring(0, index).trim();
+            command = command.substring(0, index).trim();
             Object[] contents = args.split(",");
             contents = quitarEspacios(contents);
             switch (command.toUpperCase()) {
                 case "AYUDA":
                     table = ayudaComandos.toTable();
                     tipoComando = TipoComando.Reporte;
+                    break;
+
+             default:
+                    tipoComando = TipoComando.Desconocido;
+                    break;
+
+            }
+            switch (tipoComando) {
+                case Insercion:
+                    if (idInserted > 0) {
+                        result.put("result", idInserted);
+                        validatorCommand.onSuccess();
+                    } else {
+                        validatorCommand.onError();
+                    }
+                    break;
+                case Reporte:
+                    result.put("result", table);
+                    validatorCommand.onSuccess();
+                    break;
+                case Estadistica:
+                    result.put("result", list);
+                    validatorCommand.onSuccess();
+                    break;
+                case Desconocido:
+                    validatorCommand.onError();
                     break;
                 default:
                     break;
@@ -112,7 +138,5 @@ public class CommandManager {
             System.out.println("Error: " + e.getMessage());
             validatorCommand.onError();
         }
-        //result.put("result", idInserted);
-        //return result;
     }
 }
