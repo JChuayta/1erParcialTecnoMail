@@ -6,8 +6,10 @@
 package Utils;
 
 import Entities.*;
+import Models.ArticuloModel;
 import Utils.AyudaComandos;
 import Utils.ValidatorCommand;
+import java.sql.Date;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -105,8 +107,22 @@ public class CommandManager {
                     table = ayudaComandos.toTable();
                     tipoComando = TipoComando.Reporte;
                     break;
-
-             default:
+                case "INSERTAR_ARTICULO":
+                    ArticuloEntity articuloEntity = new ArticuloEntity(
+                            contents[0].toString(),
+                            contents[1].toString(),
+                            contents[2].toString(),
+                            contents[3].toString()
+                    );
+                    ArticuloModel articuloModel = new ArticuloModel(articuloEntity);
+                    idInserted = articuloModel.insert();
+                    break;
+                case "RPT_ARTICULOS":
+                    List<ArticuloEntity> articulo = new ArticuloModel().findAll(Status.Active) ;
+                    table = new ArticuloModel().toTable(articulo);
+                    tipoComando = TipoComando.Reporte;
+                    break;
+                default:
                     tipoComando = TipoComando.Desconocido;
                     break;
 

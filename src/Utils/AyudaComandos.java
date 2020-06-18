@@ -19,7 +19,8 @@ public class AyudaComandos {
     List<AyudaEntity> list = new ArrayList<>();
 
     public AyudaComandos() {
-        list.add(new AyudaEntity("INSERTAR ACTIVIDAD", "Nombre: String<br>Codigo: Integer<br>Descripcion: String", "Comando para insertar una actividad.", "INSERTAR_ACTIVIDAD(Nombre,Codigo,Descripcion)", "INSERTAR_ACTIVIDAD(Nombre,Codigo,Descripcion)"));
+        list.add(new AyudaEntity("INSERTAR ARTICULO", "Descripcion: String<br>Estado: String(A,N)<br>Fecha: Date<br>Hora: String", "Comando para insertar un articulo.", "INSERTAR_ARTICULO(Decripcion,Estado,Fecha,Hora)","INSERTAR_ARTICULO(Decripcion,Estado,Fecha,Hora)"));
+        list.add(new AyudaEntity("REPORTE DE ARTICULO", "Ninguno", "Comando para generar un reporte de ARTICULOS.", "RPT_ARTICULOS()", "RPT_ARTICULOS()"));
     }
 
     public DefaultTableModel toTable() {
