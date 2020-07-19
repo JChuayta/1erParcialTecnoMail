@@ -7,7 +7,7 @@ package Conexion;
 
 /**
  *
- * @author grupo10sc
+ * @author Grupo10sc
  */
 public enum GenericStoredProcedures {
     framework_generic_insert,

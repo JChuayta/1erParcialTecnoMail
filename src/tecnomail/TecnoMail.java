@@ -5,9 +5,14 @@
  */
 package tecnomail;
 
+import Utils.PieChart;
+import Utils.CommandManager;
 import Entities.*;
-import Services.*;
-import Utils.*;
+import Services.ClientPOP;
+import Services.Mail;
+import Services.MailMessage;
+import Utils.Utils;
+import Utils.ValidatorCommand;
 import java.io.IOException;
 import java.util.List;
 import java.util.logging.Level;
@@ -20,6 +25,7 @@ import javax.swing.table.DefaultTableModel;
  * @author Grupo10sc
  */
 public class TecnoMail {
+
     /**
      * @param args the command line arguments
      */
@@ -35,10 +41,16 @@ public class TecnoMail {
                     MailMessage mail = list.get(0);
                     String message = clientPOP.getMessage(mail.getIndex());
                     String asunto = clientPOP.getCommand(message).trim();
-                    CommandManager commandManager = new CommandManager(asunto);
+                    //INSERTAR_PERSONA(Antony,Rios,9548665,23123,2342342,Santa cruz,Andrez I.,Plan 4000,ant@gmail.com,imagen,C)
                     System.out.println("Asunto: " + asunto);
+                    if (asunto.indexOf("imagen") > 0) {
+                        String image = clientPOP.getImage(message).trim();
+                       // image = "data:image/jpeg;base64," + image;
+                        asunto = asunto.replace("imagen", image);
+                    }
+                    CommandManager commandManager = new CommandManager(asunto);
                     String from = clientPOP.getFrom(message);
-                    System.out.println(from);
+                    //System.out.println("AsuntoModificado: " + asunto);
                     commandManager.executeCommand(new ValidatorCommand() {
                         @Override
                         public void onSuccess() {
@@ -48,15 +60,24 @@ public class TecnoMail {
                                 switch (commandManager.getTipoComando()) {
                                     case Insercion:
                                         int idInserted = (int) commandManager.getResult().get("result");
-                                        html = "EJECUTADO CORRECTAMENTE: LLAVE GENERADA=" + idInserted;
+                                        html = "NUMEROS DE FILAS AFECTADOS POR LA INSTRUCCION " + idInserted;
                                         pathChart = "";
                                         break;
                                     case Reporte:
+                                        html = Utils.dibujarTablawithHTMLListado((DefaultTableModel) commandManager.getResult().get("result"));
+                                        pathChart = "";
+                                        break;
+                                    case Listado:
                                         html = Utils.dibujarTablawithHTML((DefaultTableModel) commandManager.getResult().get("result"));
                                         pathChart = "";
                                         break;
+
+                                    case Estadistica:
+                                        PieChart chart = new PieChart("Ejemplo", commandManager.getNombreEstadistica(), (List<EstadisticaEntity>) commandManager.getResult().get("result"));
+                                        pathChart = "chart.jpg";
+                                        break;
                                 }
-                                System.out.println(html);
+                                // System.out.println(html);
                                 mailManager.sendHtmlEmail(from, "INFORME DE EJECUCION DEL COMANDO " + commandManager.getCommand(), html, pathChart);
                             } catch (MessagingException | IOException ex) {
                                 Logger.getLogger(TecnoMail.class.getName()).log(Level.SEVERE, null, ex);

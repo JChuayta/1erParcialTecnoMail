@@ -11,25 +11,25 @@ import java.sql.*;
  *
  * @author Grupo10sc
  */
-public class ArticuloEntity {
+public class MarcaEntity {
 
     private int id;
     private String descripcion;
     private String estado;
     private Date fecha;
-    private String hora;
+    private Time hora;
 
-    public ArticuloEntity() {
+    public MarcaEntity() {
     }
-
-    public ArticuloEntity(int id, String descripcion, Date fecha, String hora) {
+    //constructor para modificar el caso de uso
+    public MarcaEntity(int id, String descripcion, Date fecha, Time hora) {
         this.id = id;
         this.descripcion = descripcion;
         this.fecha = fecha;
         this.hora = hora;
     }
-
-    public ArticuloEntity(String descripcion, Date fecha, String hora) {
+    // consstrunctor para insertar el caso de uso
+    public MarcaEntity(String descripcion, Date fecha, Time hora) {
         this.descripcion = descripcion;
         this.fecha = fecha;
         this.hora = hora;
@@ -67,11 +67,11 @@ public class ArticuloEntity {
         this.fecha = fecha;
     }
 
-    public String getHora() {
+    public Time getHora() {
         return hora;
     }
 
-    public void setHora(String hora) {
+    public void setHora(Time hora) {
         this.hora = hora;
     }
 

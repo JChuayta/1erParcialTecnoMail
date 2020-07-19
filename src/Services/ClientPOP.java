@@ -80,7 +80,7 @@ public class ClientPOP {
         }
         return sw;
     }
- 
+
     public String getMessagesList() {
         String listMessages = "";
         try {
@@ -119,21 +119,21 @@ public class ClientPOP {
 
     public List<MailMessage> getIndexMessagesList() {
         List<MailMessage> list = new ArrayList<>();
- 
-            String messagesList = getMessagesList();
-            if (messagesList.length() > 1) {
-                int indexAux = messagesList.indexOf("\r");
-                messagesList = messagesList.substring(0, indexAux);
-                String[] messages = messagesList.split("\n");
-                for (String message : messages) {
-                    list.add(MailMessage.format(message));
-                }
+
+        String messagesList = getMessagesList();
+        if (messagesList.length() > 1) {
+            int indexAux = messagesList.indexOf("\r");
+            messagesList = messagesList.substring(0, indexAux);
+            String[] messages = messagesList.split("\n");
+            for (String message : messages) {
+                list.add(MailMessage.format(message));
             }
+        }
 
         return list;
     }
 
-    public void deleteMessage(int index) {       
+    public void deleteMessage(int index) {
         try {
 
             String comando = "DELE " + index + "\r\n";
@@ -168,27 +168,39 @@ public class ClientPOP {
         return lines + "\r\n";
     }
 
-    public String getFrom(String message){
+    public String getFrom(String message) {
         int indexFrom = message.toUpperCase().indexOf("FROM: ");
         String subSubject = message.substring(indexFrom + 5);
-        int indexBegin=subSubject.indexOf("<");
-        int indexEnd=subSubject.indexOf(">");
-        String from=subSubject.substring(indexBegin+1,indexEnd);
+        int indexBegin = subSubject.indexOf("<");
+        int indexEnd = subSubject.indexOf(">");
+        String from = subSubject.substring(indexBegin + 1, indexEnd);
         return from.trim();
     }
-    
+
+    public String getImage(String message) {
+        int index = message.indexOf("base64");
+        String subMessage = message.substring(index + 6).trim();
+        // System.out.println("base =>> " + subMessage);
+        int fin = subMessage.indexOf("--_004_");
+        String aux = subMessage.substring(0, fin).trim();
+        
+        /*aux = 'data:image/jpeg;base64,' + aux;*/
+        aux = aux.replace("\n", "");
+        return aux;
+    }
+
     public String getCommand(String message) {
         int indexSubject = message.toUpperCase().indexOf("SUBJECT: ");
         String SubSubject = message.substring(indexSubject + 8);
         String aux = "";
         for (int i = 0; i < SubSubject.length() - 10; i++) {
             if (SubSubject.charAt(i) == ')') {
-                aux = SubSubject.substring(0, i+1);
+                aux = SubSubject.substring(0, i + 1);
                 break;
             }
         }
-        aux=aux.replace("\n", "");
-        System.out.println("Aux:"+aux);
+        aux = aux.replace("\n", "");
+        // System.out.println("Aux:"+aux);
         return aux;
     }
 

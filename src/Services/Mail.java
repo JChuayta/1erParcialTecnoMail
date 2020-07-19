@@ -28,7 +28,7 @@ import javax.mail.internet.MimeMultipart;
 
 /**
  *
- * @author grupo10sc
+ * @author Grupo10sc
  */
 public class Mail {
 
@@ -67,10 +67,12 @@ public class Mail {
                 adjunto.setFileName("Grafico");
             }
             mime.setContent(multiParte);
+           // System.out.println("Mensaje enviado con exito");
             System.out.println("Envie MAIL: to=" + toAddress + " subject=" + subject + " data:" + message);
             Transport.send(mime);
         } catch (MessagingException mex) {
             mex.printStackTrace();
         }
     }
+
 }

@@ -16,23 +16,23 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author Grupo10sc
  */
-public class ArticuloModel extends Model<ArticuloEntity> {
+public class MarcaModel extends Model<MarcaEntity> {
 
-    ArticuloEntity entity;
+    MarcaEntity entity;
 
-    public ArticuloModel(ArticuloEntity entity) {
+    public MarcaModel(MarcaEntity entity) {
         this.entity = entity;
     }
 
-    public ArticuloModel() {
-        entity = new ArticuloEntity();
+    public MarcaModel() {
+        entity = new MarcaEntity();
     }
 
-    public ArticuloEntity getEntity() {
+    public MarcaEntity getEntity() {
         return entity;
     }
 
-    public void setEntity(ArticuloEntity entity) {
+    public void setEntity(MarcaEntity entity) {
         this.entity = entity;
     }
 
@@ -44,34 +44,33 @@ public class ArticuloModel extends Model<ArticuloEntity> {
         atr.put("estado", entity.getEstado());
         atr.put("fecha", entity.getFecha());
         atr.put("hora", entity.getHora());
-        return new Entity("articulo", atr);
+        return new Entity("marca", atr);
     }
 
     @Override
-    public ArticuloEntity loadData(ResultSet rs) throws SQLException {
-        entity = new ArticuloEntity();
-
+    public MarcaEntity loadData(ResultSet rs) throws SQLException {
+        entity = new MarcaEntity();
         entity.setId(rs.getInt("id"));
         entity.setDescripcion(rs.getString("descripcion"));
         entity.setEstado(rs.getString("estado"));
         entity.setFecha(rs.getDate("fecha"));
-        entity.setHora(rs.getString("hora"));
+        entity.setHora(rs.getTime("hora"));
         return entity;
     }
 
     @Override
-    public ArticuloEntity findById(int id) {
+    public MarcaEntity findById(int id) {
         return super.findById(id);
     }
 
-    public DefaultTableModel toTable(List<ArticuloEntity> list) {
-        DefaultTableModel model = new DefaultTableModel(new Object[]{"ID", "DESCRIPCION", "FECHA", "HORA"}, list.size());
-//        System.out.println("cantidad=>>>" + list.size());
-        for (ArticuloEntity en : list) {
+    public DefaultTableModel toTable(List<MarcaEntity> list) {
+        DefaultTableModel model = new DefaultTableModel(new Object[]{"ID", "NOMBRE", "ESTADO", "FECHA", "HORA"}, list.size());
+        for (MarcaEntity en : list) {
             if (en != null) {
                 model.addRow(new Object[]{
                     en.getId(),
-                    en.getDescripcion(),                    
+                    en.getDescripcion(),
+                    en.getEstado(),
                     en.getFecha(),
                     en.getHora()
                 });
@@ -80,4 +79,6 @@ public class ArticuloModel extends Model<ArticuloEntity> {
 
         return model;
     }
+
+  
 }

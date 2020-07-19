@@ -7,7 +7,7 @@ package Entities;
 
 /**
  *
- * @author Mijael
+ * @author Grupo10sc
  */
 public class EstadisticaEntity {
     private String label;

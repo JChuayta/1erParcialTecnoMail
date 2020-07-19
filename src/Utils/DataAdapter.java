@@ -16,7 +16,7 @@ import java.util.Map;
  */
 public interface DataAdapter<T> {
     
-    public abstract List<T> findAll(Status status);
+    public abstract List<T> findAll();
     public abstract T findById(int id);
     public abstract List<T> findListById(int id);
     public abstract T findByParams(Map<String, Object> args);

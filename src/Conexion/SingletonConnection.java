@@ -162,29 +162,30 @@ public class SingletonConnection implements Serializable {
         return result;
     }
 
-    public ResultSet callGenericProcedure(GenericStoredProcedures procedure, Entity entity) throws SQLException {
+    public int callGenericProcedure(GenericStoredProcedures procedure, Entity entity) throws SQLException {
         Statement cst;
         String query = "";
-        String query2 = "";
+
+        cst = objConnection.createStatement();
         switch (procedure) {
             case framework_generic_insert:
                 Object[] fieldsAndValues = getFieldsAndValues(entity);
-                query = "insert into " + entity.getTable() + "(" + fieldsAndValues[0] + ")values(" + fieldsAndValues[1] + ");";
-                query2 = " SELECT currval('" + entity.getTable() + "_id_seq')";
-                System.out.println(query);
+                query = "insert into " + entity.getTable() + "(" + fieldsAndValues[0] + ")values(" + fieldsAndValues[1] + ");";// RETURNING Currval('" + entity.getTable() + "_id_seq');";
+            //    System.out.println(query);
+
                 break;
             case framework_generic_update:
-                query = "execute " + procedure.toString() + "('" + entity.getTable() + "'," + getValuesForUpdate(entity.getFields()) + ",'" + (int) entity.getFields().get("id");
+                query = "update " + entity.getTable() + " set " + getValuesForUpdate(entity.getFields()) + " where id = " + (int) entity.getFields().get("id");
                 System.out.println(query);
                 break;
             case framework_generic_delete:
-                query = "execute " + procedure.toString() + "('" + entity.getTable() + "'," + "'" + (int) entity.getFields().get("id") + "'";
+                query = "update " + entity.getTable() + " set estado = 'N' where id = " + (int) entity.getFields().get("id");
                 System.out.println(query);
                 break;
         }
-        cst = objConnection.createStatement();
-        cst.executeUpdate(query);
-        return cst.executeQuery(query2);
+        int result = cst.executeUpdate(query);
+        System.out.println("resultado=>>" + result);
+        return result;
     }
 
     public ResultSet executeSelectById(Entity entity, int id) throws SQLException {
@@ -203,7 +204,7 @@ public class SingletonConnection implements Serializable {
 
     public ResultSet callGenericFindProcedure(Entity entity) throws SQLException {
         CallableStatement cst;
-        String query = "select * from " + entity.getTable() + " where " + getValuesForFind(entity.getFields()) + ";";
+        String query = "select * from " + entity.getTable() + " where estado = 'A';";
         System.out.println(query);
         cst = objConnection.prepareCall(query);
         return (cst != null ? cst.executeQuery() : null);
@@ -263,27 +264,31 @@ public class SingletonConnection implements Serializable {
                 switch (className) {
                     case "java.lang.String":
                         result[1] += "'" + value.toString() + "',";
-                        System.out.println("Result" + result[1]);
+                     //   System.out.println("Result" + result[1]);
                         break;
                     case "java.lang.Integer":
                         result[1] += "'" + (int) value + "',";
-                        System.out.println("Result" + result[1]);
+                       // System.out.println("Result" + result[1]);
                         break;
                     case "java.lang.Double":
                         result[1] += "'" + Double.valueOf(value.toString()) + "',";
-                        System.out.println("Result" + result[1]);
+                       // System.out.println("Result" + result[1]);
                         break;
                     case "java.math.BigDecimal":
                         result[1] += "'" + new BigDecimal(value.toString()) + "',";
-                        System.out.println("Result" + result[1]);
+                      //  System.out.println("Result" + result[1]);
                         break;
                     case "java.sql.Date":
                         result[1] += "'" + java.sql.Date.valueOf(value.toString()) + "',";
-                        System.out.println("Result" + result[1]);
+                       // System.out.println("Result" + result[1]);
                         break;
                     case "java.lang.Byte":
                         result[1] += "'" + Byte.parseByte(value.toString()) + "', ";
-                        System.out.println("Result" + result[1]);
+                        //System.out.println("Result" + result[1]);
+                        break;
+                    case "java.sql.Time":
+                        result[1] += "'" + java.sql.Time.valueOf(value.toString()) + "',";
+                        //System.out.println("Result" + result[1]);
                         break;
                     default:
                         System.out.println("No se encontró la clase " + className);
@@ -299,25 +304,38 @@ public class SingletonConnection implements Serializable {
     }
 
     private String getValuesForUpdate(Map<String, Object> args) {
-        Object coma = '"';
+        Object coma = "";
         String params = coma.toString();
+        boolean sw = false;
         for (Map.Entry<String, Object> entrySet : args.entrySet()) {
             if (!entrySet.getKey().equals("id")) {
+                if (sw) {
+                    params += ",";
+                }
                 params += entrySet.getKey() + "=";
                 Object value = entrySet.getValue();
                 String className = value.getClass().getCanonicalName();
+                sw = true;
                 switch (className) {
                     case "java.lang.String":
-                        params += "'" + value.toString() + "',";
-                        System.out.println("Result" + params);
+                        params += "'" + value.toString() + "'";
+                        System.out.println("Result " + params);
+                        break;
+                    case "java.sql.Time":
+                        params += "'" + java.sql.Time.valueOf(value.toString()) + "'";
+                        System.out.println("Result " + params);
+                        break;
+                    case "java.sql.Date":
+                        params += "'" + java.sql.Date.valueOf(value.toString()) + "'";
+                        System.out.println("Result " + params);
                         break;
                     case "java.lang.Integer":
-                        params += "'" + (int) value + "',";
-                        System.out.println("Result" + params);
+                        params += "'" + (int) value + "'";
+                        System.out.println("Result " + params);
                         break;
                     case "java.math.BigDecimal":
-                        params += "'" + new BigDecimal(value.toString()) + "',";
-                        System.out.println("Result" + params);
+                        params += "'" + new BigDecimal(value.toString()) + "'";
+                        System.out.println("Result " + params);
                         break;
                     default:
                         System.out.println("No se encontró la clase " + className);

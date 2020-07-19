@@ -16,23 +16,23 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author Grupo10sc
  */
-public class ArticuloModel extends Model<ArticuloEntity> {
+public class ModeloModel extends Model<ModeloEntity> {
 
-    ArticuloEntity entity;
+    ModeloEntity entity;
 
-    public ArticuloModel(ArticuloEntity entity) {
+    public ModeloModel(ModeloEntity entity) {
         this.entity = entity;
     }
 
-    public ArticuloModel() {
-        entity = new ArticuloEntity();
+    public ModeloModel() {
+        entity = new ModeloEntity();
     }
 
-    public ArticuloEntity getEntity() {
+    public ModeloEntity getEntity() {
         return entity;
     }
 
-    public void setEntity(ArticuloEntity entity) {
+    public void setEntity(ModeloEntity entity) {
         this.entity = entity;
     }
 
@@ -40,42 +40,42 @@ public class ArticuloModel extends Model<ArticuloEntity> {
     public Entity loadEntity() {
         Map<String, Object> atr = new HashMap<>();
         atr.put("id", entity.getId());
+        atr.put("idmarca", entity.getIdmarca());
         atr.put("descripcion", entity.getDescripcion());
         atr.put("estado", entity.getEstado());
         atr.put("fecha", entity.getFecha());
         atr.put("hora", entity.getHora());
-        return new Entity("articulo", atr);
+        return new Entity("modelo", atr);
     }
 
     @Override
-    public ArticuloEntity loadData(ResultSet rs) throws SQLException {
-        entity = new ArticuloEntity();
-
+    public ModeloEntity loadData(ResultSet rs) throws SQLException {
+        entity = new ModeloEntity();
         entity.setId(rs.getInt("id"));
+        entity.setIdmarca(rs.getInt("idmarca"));
         entity.setDescripcion(rs.getString("descripcion"));
         entity.setEstado(rs.getString("estado"));
         entity.setFecha(rs.getDate("fecha"));
-        entity.setHora(rs.getString("hora"));
+        entity.setHora(rs.getTime("hora"));
         return entity;
     }
 
     @Override
-    public ArticuloEntity findById(int id) {
+    public ModeloEntity findById(int id) {
         return super.findById(id);
     }
 
-    public DefaultTableModel toTable(List<ArticuloEntity> list) {
-        DefaultTableModel model = new DefaultTableModel(new Object[]{"ID", "DESCRIPCION", "FECHA", "HORA"}, list.size());
-//        System.out.println("cantidad=>>>" + list.size());
-        for (ArticuloEntity en : list) {
-            if (en != null) {
-                model.addRow(new Object[]{
-                    en.getId(),
-                    en.getDescripcion(),                    
-                    en.getFecha(),
-                    en.getHora()
-                });
-            }
+    public DefaultTableModel toTable(List<ModeloEntity> list) {
+        DefaultTableModel model = new DefaultTableModel(new Object[]{"ID", "IDMARCA", "NOMBRE", "ESTADO", "FECHA", "HORA"}, list.size());
+        for (ModeloEntity en : list) {
+            model.addRow(new Object[]{
+                en.getId(),
+                en.getIdmarca(),
+                en.getDescripcion(),
+                en.getEstado(),
+                en.getFecha(),
+                en.getHora()
+            });
         }
 
         return model;

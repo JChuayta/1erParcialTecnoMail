@@ -35,7 +35,7 @@ public class Utils {
                 + "<head>\n"
                 + "<style>\n"
                 + ".button {\n"
-                + "    background-color: #ADA6A4; /* YA NO GREEN */\n"
+                + "    background-color: #3a98b4; /* YA NO GREEN */\n"
                 + "    border: none;\n"
                 + "    color: white;\n"
                 + "    padding: 15px 32px;\n"
@@ -64,7 +64,7 @@ public class Utils {
                 + "tr:nth-child(even){background-color: #f2f2f2}\n"
                 + "\n"
                 + "th {\n"
-                + "    background-color: #ADA6A4;\n"
+                + "    background-color: #3a98b4;\n"
                 + "    color: white;\n"
                 + "}\n"
                 + "</style>\n"
@@ -81,8 +81,10 @@ public class Utils {
         tableString += "</tr> \n"
                 + "</thead> \n";
         for (int i = 0; i < tabla.getRowCount(); i++) {
+//            System.out.println("Cantidad de filas " + tabla.getRowCount());
             tableString += "<tr> \n";
             for (int j = 0; j < tabla.getColumnCount(); j++) {
+//                System.out.println("Cantidad de columnas " + tabla.getColumnCount());
                 tableString += "<td>"
                         + (String.valueOf(tabla.getValueAt(i, j)))
                         + "</td> \n";
@@ -100,31 +102,14 @@ public class Utils {
         return tableString;
     }
 
-    public static String dibujarTablawithHTML2(DefaultTableModel tabla) {
+    public static String dibujarTablawithHTMLListado(DefaultTableModel tabla) {
         String tableString = "";
         tableString += "<!DOCTYPE html>\n"
                 + "<html>\n"
                 + "<head>\n"
-                + "<script type=\"text/javascript\" src=\"https://www.gstatic.com/charts/loader.js\"></script>\n"
-                + "<script type=\"text/javascript\">\n"
-                + "google.charts.load('current', {packages: ['corechart']});\n"
-                + "google.charts.setOnLoadCallback(drawChart);\n"
-                + "function drawChart() {\n"
-                + "var data = new google.visualization.DataTable();\n"
-                + "data.addColumn('string', 'Element');\n"
-                + "data.addColumn('number', 'Percentage');\n"
-                +"data.addRows([\n";
-                for (int i = 0; i < tabla.getRowCount(); i++) {
-                tableString += "[" + (tabla.getValueAt(i, 0)) + "," + (tabla.getValueAt(i, 1)) + "],";
-                }
-                tableString +="]);"
-                + "var chart = new google.visualization.PieChart(document.getElementById('myPieChart'));\n"
-                + "chart.draw(data, null);\n"
-                + "}\n"
-                + "</script>\n"
                 + "<style>\n"
                 + ".button {\n"
-                + "    background-color: #4CAF50; /* Green */\n"
+                + "    background-color: #3a98b4; /* YA NO GREEN */\n"
                 + "    border: none;\n"
                 + "    color: white;\n"
                 + "    padding: 15px 32px;\n"
@@ -153,40 +138,34 @@ public class Utils {
                 + "tr:nth-child(even){background-color: #f2f2f2}\n"
                 + "\n"
                 + "th {\n"
-                + "    background-color: #4CAF50;\n"
+                + "    background-color: #3a98b4;\n"
                 + "    color: white;\n"
                 + "}\n"
                 + "</style>\n"
                 + "</head>\n"
                 + "<body>\n"
-                + "<div id=\"myPieChart\"/>\n"       
                 + "<div class=\"w3-container\">\n"
                 + "\n"
                 + "  <table class=\"w3-table-all\">\n"
                 + "    <thead>\n"
                 + "<tr class=\"w3-red\">\n";
+       // System.out.println(tableString);
         for (int i = 0; i < tabla.getColumnCount(); i++) {
             tableString += "<th>" + (tabla.getColumnName(i)) + "</th> \n";
         }
-        tableString += "<th> Opciones </th> \n";
         tableString += "</tr> \n"
                 + "</thead> \n";
-
-        for (int i = 0; i < tabla.getRowCount(); i++) {
+        for (int i = tabla.getRowCount() / 2; i < tabla.getRowCount(); i++) {
+//            System.out.println("Cantidad de filas " + tabla.getRowCount());
             tableString += "<tr> \n";
             for (int j = 0; j < tabla.getColumnCount(); j++) {
+//                System.out.println("Cantidad de columnas " + tabla.getColumnCount());
                 tableString += "<td>"
                         + (String.valueOf(tabla.getValueAt(i, j)))
                         + "</td> \n";
             }
-            //<a href=\"mailto:" + Constants.MAIL_USERMAIL + "?subject=ELIMINAR\"><button class=\"button button3\">ELIMINAR</button></a>
-            tableString += "<td><a href=\"mailto:" + Constantes.MAIL_USERMAIL + "?subject=MODIFICAR\"> <button class=\"button button5\">MODIFICAR</button>  "
-                    + "<a href=\"mailto:" + Constantes.MAIL_USERMAIL + "?subject=ELIMINAR\"> <button class=\"button button3\">ELIMINAR</button> </td> \n";
-
             tableString += "</tr> \n";
-
         }
-
         if (tabla.getRowCount() < 1) {
             return "(Tabla Vacia)";
         }
@@ -195,10 +174,9 @@ public class Utils {
                 + "\n"
                 + "</body>\n"
                 + "</html> ";
-
         return tableString;
     }
-    
+
     public static String mailResponse(TIPO_RESPUESTA tipo, String comando, int identity) {
         String html = "";
         try {

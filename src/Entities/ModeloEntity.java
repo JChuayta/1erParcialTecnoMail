@@ -11,25 +11,28 @@ import java.sql.*;
  *
  * @author Grupo10sc
  */
-public class ArticuloEntity {
+public class ModeloEntity {
 
     private int id;
+    private int idmarca;
     private String descripcion;
     private String estado;
     private Date fecha;
-    private String hora;
+    private Time hora;
 
-    public ArticuloEntity() {
+    public ModeloEntity() {
     }
-
-    public ArticuloEntity(int id, String descripcion, Date fecha, String hora) {
+    //constructor para modificar el caso de uso
+    public ModeloEntity(int id, int idmarca, String descripcion, Date fecha, Time hora) {
         this.id = id;
+        this.idmarca = idmarca;
         this.descripcion = descripcion;
         this.fecha = fecha;
         this.hora = hora;
     }
 
-    public ArticuloEntity(String descripcion, Date fecha, String hora) {
+    public ModeloEntity(int idmarca, String descripcion,  Date fecha, Time hora) {
+        this.idmarca = idmarca;
         this.descripcion = descripcion;
         this.fecha = fecha;
         this.hora = hora;
@@ -41,6 +44,14 @@ public class ArticuloEntity {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public int getIdmarca() {
+        return idmarca;
+    }
+
+    public void setIdmarca(int idmarca) {
+        this.idmarca = idmarca;
     }
 
     public String getDescripcion() {
@@ -67,11 +78,11 @@ public class ArticuloEntity {
         this.fecha = fecha;
     }
 
-    public String getHora() {
+    public Time getHora() {
         return hora;
     }
 
-    public void setHora(String hora) {
+    public void setHora(Time hora) {
         this.hora = hora;
     }
 
